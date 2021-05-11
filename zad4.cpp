@@ -146,8 +146,14 @@ std::string equalNegativ(std::string num1, std::string num2) {
   return result;
 }
 
+bool specialCondition(std::string num1, std::string num2) {
+  if ( (num1.length() == 2 and num1[0] == '-' and num1[1] == '0' and num2[0] and num2.length() == 1) or (num2.length() == 2 and num2[0] == '-' and num2[1] == '0' and num1[0] == '0' and num1.length() == 1 )) return true;
+  return false;
+}
+
 std::string equal(std::string num1, std::string num2) {
   std::string result;
+  if (specialCondition(num1, num2)) return "Equal";
   if (num1[0] != '-' and num2[0] == '-') return "More";
   if (num1[0] == '-' and num2[0] != '-') return "Less";  
   

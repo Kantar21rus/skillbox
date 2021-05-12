@@ -1,12 +1,12 @@
 #include <iostream>
 
 bool charCheckFPart(char in) {
-  if (in == 33 or (in >=35 and in <=39) or in == 42 or in == 43 or ( in >= 45 and in <= 57 ) or ( in >= 63 and in <= 90) or ( in >=94 and in <= 126)) return true;
+  if (in == '!' or (in >='#' and in <='\'') or in == '*' or in == '+' or ( in >= '-' and in <= '9' ) or ( in >= '?' and in <= 'Z') or ( in >='^' and in <= '~')) return true;
   return false;
 }
 
 bool charCheckBPart(char in) {
-  if (in == 45 or in == 46 or ( in >= 48 and in <= 57 ) or ( in >= 65 and in <= 90) or ( in >=97 and in <= 122)) return true;
+  if (in == '-'  or in == '.' or ( in >= '0' and in <= '9' ) or ( in >= 'A' and in <= 'Z') or ( in >='a' and in <= 'z')) return true;
   return false;
 }
 

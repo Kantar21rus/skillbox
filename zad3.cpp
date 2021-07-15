@@ -1,23 +1,23 @@
 #include <iostream>
-
+#include <vector>
 
 int main() {
-  int countFloor = 5;
-  int countPeopleRegistr;
-  int peopleFloor[countFloor];
-  int countPeopleNow = 0;
-
-  std::cout << "Number of residents: ";
-  std::cin >> countPeopleRegistr ;
-  
-  for (int i = 0; i < countFloor; i++) {
-    std::cout << "Number of residents on floor " << i+1 << ": ";
-    std::cin >> peopleFloor[i];
-    countPeopleNow += peopleFloor[i];
-		 
+  std::vector<int> data(20);
+  for (;;) {
+    int input;
+    std::cin >> input;
+    if (input == -1) {
+      std::cout << "---------------\n";
+      for(int i = 0; i < 20 ; ++i) {
+	std::cout << data[i] << "\t";
+      }
+      std::cout << "\n";
+      return 0;
+    }
+    for(int i=0; i < 19; ++i ) {
+      data[i] = data[i+1];
+    }
+    data[19] = input;
   }
-
-  std::cout << "Isolation level: " << ((float)  countPeopleNow * 100) / (float) countPeopleRegistr << "\n";
-
-      
 }
+    

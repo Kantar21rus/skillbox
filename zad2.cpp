@@ -1,18 +1,14 @@
 #include <iostream>
-
+#include <vector>
 
 int main() {
-  int store[1];
-  int gym[2];
-  int cottage[3];
-  int house[15];
-  int skyscraper[50];
-  float average;
+  std::vector<double> price{2.5, 4.25, 3.0, 10.0};
+  std::vector<int> buyList{1,1,0,3};
+  double sum = 0;
+  for (int i=0; i < buyList.size(); ++i) {
+    sum += price[buyList[i]];
+  }
+  std::cout << sum << "\n";
 
-  average = ((float) (sizeof(store) + sizeof(gym) + sizeof(cottage) + sizeof(house) + sizeof(skyscraper)))/((float) (sizeof(int) * 5));
-
-  std::cout << "Average floor " << average << "\n";
+  return 0;
 }
-  
-  
-  

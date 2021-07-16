@@ -8,7 +8,6 @@ int main() {
   std::cin >> n;
   std::cout << "------------------------\n";
   std::vector<int> vec1(n);
-  std::vector<int> vec2(0);
   for (int i=0; i < n ;++i) {
     std::cin >> vec1[i];
   }
@@ -19,14 +18,14 @@ int main() {
     if (vec1[i] == x) {
       ++countX;
     } else {
-      vec2.push_back(vec1[i]);
+      vec1[i-countX]=vec1[i];
     }
   }
-  
+  vec1.resize(n-countX);
   for (int i=0; i < (n-countX) ;++i) {
-    std::cout << vec2[i] << "\t";
+    std::cout << vec1[i] << "\t";
   }
-  std::cout << "\n";
+  std::cout <<"\n";
   
   return 0;
 }  

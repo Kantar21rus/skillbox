@@ -1,31 +1,49 @@
 #include <iostream>
-#include <vector>
 
+void output (std::string name, int array[2][6]) {
+  std::cout << name <<"\n-----------------------------------------\n";
+  for (int i=0; i < 2 ; ++i) {
+    for (int j=0; j < 6; ++j) {
+      std::cout << array[i][j] << "\t";
+    }
+    std::cout << "\n";
+  }
+  std::cout << "+++++++++++++++++++++++++++++++++++++++++\n";
+}
 
 int main() {
-  int n, x;
-  int countX = 0;
-  std::cin >> n;
-  std::cout << "------------------------\n";
-  std::vector<int> vec1(n);
-  for (int i=0; i < n ;++i) {
-    std::cin >> vec1[i];
-  }
-  std::cout << "------------------------\n";
-  std::cin >> x;
-  std::cout << "------------------------\n";
-  for (int i=0; i < n ; ++i) {
-    if (vec1[i] == x) {
-      ++countX;
-    } else {
-      vec1[i-countX]=vec1[i];
+  int plates[2][6];
+  int seats[2][6];
+  int spoons[2][6];
+  for (int i=0; i < 2 ; ++i) {
+    for (int j=0; j < 6; ++j) {
+      if (j == 0) {
+	spoons[i][j] = 4;
+	plates[i][j] = 3;
+      } else {
+	spoons[i][j] = 3;
+	plates[i][j] = 2;
+      }
+      seats[i][j] = 1;
     }
   }
-  vec1.resize(n-countX);
-  for (int i=0; i < (n-countX) ;++i) {
-    std::cout << vec1[i] << "\t";
-  }
-  std::cout <<"\n";
+  std::cout << "Was:\n";
+  output("Spoons", spoons);
+  output("Plates", plates);
+  output("Seats", seats);
+
+  seats[0][4] +=1;
+  spoons[1][0] -=1;
+  plates[1][0] -=1;
   
-  return 0;
-}  
+  std::cout << "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\nNow:\n";
+  output("Spoons", spoons);
+  output("Plates", plates);
+  output("Seats", seats);
+
+}
+
+  
+      
+      
+      

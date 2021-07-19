@@ -9,11 +9,7 @@ int main() {
     for (int j=0; j < 5; ++j) {
       std::cin >> input;
       for (int k=0; k < 10; ++k) {
-	if (k<=input) {
-	  field[i][j][k] = 1;
-	} else {
-	field[i][j][k] = 0;
-	}
+	field[i][j][k] = (k <= input);
       }
     }
   }

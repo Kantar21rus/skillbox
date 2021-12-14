@@ -3,116 +3,184 @@
 #include <cstdlib>
 #include <ctime>
 
-
-
-struct houses
+class House
 {
-    std::string elf;
-    houses* nextHouse;
-    houses* prevHouse;
+    public: 
+        std::string elfName = "";
+        bool itsEmpty = false;
+
+        House()
+        {
+            std::cout << "Insert elf's name: ";
+            std::cin >> elfName;
+            if (elfName == "None")
+                itsEmpty = true;
+        }
 };
 
 class SmallBranch
 {
-    houses* firstHouseSmallBranch;
-    houses* lastHouseSmallBranch; 
-    houses* currentHouseSmallBranch;
-    houses* tmpSB;
+    int idSB = 0;
+    House myHouse;
 
     public:
-    SmallBranch(int countHouseSmallBranch)
+
+    SmallBranch* next;
+
+    SmallBranch(int b_id)
     {
-        std::cout << "Insert elf's name in house" << 0 << ":\n";
-        std::string name;
-        std::cin >> name;
-        firstHouseSmallBranch = new houses;
-        firstHouseSmallBranch->nextHouse = nullptr;
-        firstHouseSmallBranch->prevHouse = nullptr;
-        firstHouseSmallBranch->elf = name;
-        currentHouseSmallBranch = firstHouseSmallBranch;
-        if (countHouseSmallBranch > 1)
-        {
-            for (int i = 1; i < countHouseSmallBranch; ++i)
-            {
-                std::cout << "Insert elf's name in house" << i << ":\n";
-                std::string name;
-                std::cin >> name;
-                tmpSB = new houses;
-                currentHouseSmallBranch->nextHouse = tmpSB;
-                tmpSB->prevHouse = currentHouseSmallBranch;
-                currentHouseSmallBranch = tmpSB;
-                currentHouseSmallBranch->elf = name;
-                currentHouseSmallBranch->nextHouse = nullptr;
-            }
-            lastHouseSmallBranch = currentHouseSmallBranch;
-        }
+        idSB = b_id;
+        std::cout << "ID: " << idSB << "\n";
+        
     }
 
-    void showElfs()
+    bool houseEmpty()
     {
-        currentHouseSmallBranch = firstHouseSmallBranch;
-        while (currentHouseSmallBranch->nextHouse)
-        {
-            std::cout << currentHouseSmallBranch->elf << "\n";
-            currentHouseSmallBranch = currentHouseSmallBranch->nextHouse;
-        }
-        std::cout << currentHouseSmallBranch->elf << "\n";
+        return myHouse.itsEmpty;
     }
-    ~SmallBranch()
+
+    std::string sayNameSB()
     {
-        currentHouseSmallBranch = firstHouseSmallBranch;
-        while (currentHouseSmallBranch->nextHouse)
-        {
-            tmpSB = currentHouseSmallBranch->nextHouse;
-            delete currentHouseSmallBranch;
-            currentHouseSmallBranch = tmpSB;
-        }
-        delete currentHouseSmallBranch;
+        return myHouse.elfName;
+    }
+
+    void searchElfS(std::string &s_name, bool &s_itsFind)
+    {
+        if (s_name == myHouse.elfName)
+            s_itsFind = true;
+        else
+            s_itsFind = false;
     }
 };
 
 class BigBranch
 {
-    std::vector<SmallBranch> bigBranch();
-    int countSmallBranch;
-    int countHouseBigBranch;
-
+    int idBB = 0;
+    int countSmallB = 0;
+    House myHouse;
+    SmallBranch* startSB;
+    SmallBranch* currentSB;
+    SmallBranch* tmpSB;
+    
     public:
-        void pushToVector()
-        {
-            bigBranch();
-        }    
 
-        BigBranch(int a_countSmallBranch, int a_countHouseBigBranch)
+    BigBranch* next;
+
+    BigBranch(int a_id)
+    {
+
+        idBB = a_id;
+        std::cout << "Big Branch ID: " << idBB << "\n";
+        countSmallB = rand() % 2 + 2;
+        std::cout << "Count small branch: " << countSmallB << "\n";
+        startSB = new SmallBranch(0);
+        currentSB = startSB;
+        for (int i=1; i < countSmallB; ++i)
         {
-            countSmallBranch = a_countSmallBranch;
-            countHouseBigBranch = a_countHouseBigBranch;
-            
+            tmpSB = new SmallBranch(i);
+            currentSB->next = tmpSB;
+            currentSB = tmpSB;
         }
+    }
+    
+    void showElfs()
+    {
+        if (!myHouse.itsEmpty) 
+            std::cout << myHouse.elfName << "\n";
+        currentSB = startSB;
+        while (currentSB->next)
+        {
+            if (!currentSB->houseEmpty()) 
+                std::cout << currentSB->sayNameSB()<< "\n";
+            tmpSB = currentSB->next;
+            currentSB = tmpSB;
+        }
+        if (!currentSB->houseEmpty()) 
+            std::cout << currentSB->sayNameSB()<< "\n";
+    }
 
+    void searchElfB(std::string &b_name, bool b_itsFind)
+    {
+        if (myHouse.elfName == b_name) 
+        {
+            b_itsFind = true;
+            showElfs();
+            return;
+        }
+        currentSB = startSB;
+        for (int i=0; i<countSmallB; ++i)
+        {
+            currentSB->searchElfS(b_name, b_itsFind);
+            if (b_itsFind)
+            {
+                showElfs();
+                return;
+            }
+            if (currentSB->next != nullptr)
+                currentSB = currentSB->next; 
+        }
+    }
 };
 
 class Three
 {
-
-};
-
-
-class Forrest
-{
+    int countBigB = 0;
+    BigBranch* startBB;
+    BigBranch* currentBB;
+    BigBranch* tmpBB;
     public:
 
-    Three threes[5];
+    Three()
+    {
+        std::cout << "+++++++++++++++++++++++++++++++++++++++++++++\n";
+        countBigB = rand() % 3 + 3;
+        std::cout << "Count big branch: " << countBigB << "\n";
+        std::cout << "---------------------------------------------\n";
+        startBB = new BigBranch(0);
+        currentBB = startBB;
+        for (int i=1; i < countBigB; ++i)
+        {
+            std::cout << "---------------------------------------------\n";
+            tmpBB = new BigBranch(i);
+            currentBB->next = tmpBB;
+            currentBB = tmpBB;
+        }
+    }
+    
+    void searchElfT(std::string &t_name, bool &t_itsFind)
+    {
+        currentBB = startBB;
+        for (int i=0; i<countBigB; ++i)
+        {
+            currentBB->searchElfB(t_name, t_itsFind);
+            if (t_itsFind)
+            {
+                return;
+            }
+            if (currentBB->next != nullptr)
+                currentBB = currentBB->next; 
+        }
+    }
+
 };
+
 
 int main()
 {
-   // Forrest myForrest;
     std::srand(std::time(nullptr));
-    int cBranch = (std::rand() % 2 + 2);
-    int bBranch = (std::rand() % 3 + 3);
-    std::cout << cBranch << "\n";
-    SmallBranch myBranch(cBranch);
-    myBranch.showElfs();
-
+    Three myThree[5];
+    std::string elfFind = "";
+    bool itsFind = false;
+    std::cout << "--------------------------------------------------------------\n";
+    std::cout << "Insert name to find: ";
+    std::cin >> elfFind;
+    for (int i=0; i<5; ++i)
+    {
+        std::cout << "Search in three " << i << "\n";
+        myThree[i].searchElfT(elfFind, itsFind);
+        if (itsFind)
+            break;
+        else
+            std::cout << "In three " << i << " haven't this elf\n";
+    }
 }

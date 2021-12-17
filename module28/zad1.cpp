@@ -2,41 +2,81 @@
 #include <ctime>
 #include <thread>
 
+enum {
+    countSwimmer = 2
+};
+
+struct oneSwimmer
+{
+    std::string name = "";
+    double speed = 0;
+    double remained = 100;
+    bool heFinish = false;
+};
+
+void startSwim(oneSwimmer threadSwimmer)
+{
+    std::cout << threadSwimmer.name << "\t" << threadSwimmer.speed << "\n";
+    std::cout << "thread id: " << std::this_thread::get_id() << "\n";
+    while (!threadSwimmer.heFinish)
+    {
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+        threadSwimmer.remained -= threadSwimmer.speed;
+        if (threadSwimmer.remained <= 0.01)
+        {
+            threadSwimmer.heFinish=true;
+            std::cout << "Swimmer " << threadSwimmer.name << " finished!\n";
+        }
+        else 
+        {
+            std::cout << "For swimmer " << threadSwimmer.name << " remaining: " << threadSwimmer.remained << " meters to the finish line\n";
+        }
+    }
+}
 
 class Swimmer
 {   
+    oneSwimmer inCSw;
+    std::thread* line;
+
     public:
-    int id = 0;
-    std::string name = "";
-    double speed = 0;
-    bool heFinish = false;
     std::time_t startTime = 0;
     std::time_t finishTime = 0;
-    double remained = 100;
 
     Swimmer()
     {
         std::cout << "Insert name:\n";
-        std::cin >> name;
+        std::cin >> inCSw.name;
         std::cout << "Insert his speed:\n";
-        std::cin >> speed;
+        std::cin >> inCSw.speed;
     }
     
-    static void startSwim()
+    oneSwimmer getSwimmer()
     {
-
+        return inCSw;
     }
 
+    void startThread()
+    {
+        line=new std::thread(startSwim, inCSw);
+    }
+    void Join()
+    {
+        line->join();
+        delete line;
+    }
 };
 
 int main()
 {
-    Swimmer mySwimmer[6];
-    for (int i=0; i<6; ++i)
-    {
-       mySwimmer[i].startSwim();
-    } 
+    std::cout << "Main thread id: " << std::this_thread::get_id() << "\n";
+    Swimmer mySwimmer[countSwimmer];
+    oneSwimmer sThreadSwimmer;
 
-    std::thread line1(mySwimmer[0].startSwim);
+    for (int i=0; i<countSwimmer; ++i)
+        mySwimmer[i].startThread();
+
+    for (int i=0; i<countSwimmer; ++i)
+        mySwimmer[i].Join();
 
 }

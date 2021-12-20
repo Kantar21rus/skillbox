@@ -86,14 +86,22 @@ int main()
         mySwimmer[i].Join();
     }
     
+    oneSwimmer* pos[countSwimmer];
+
     for (int i=0; i<countSwimmer; ++i)
     {
-        double fastest = mySwimmer[0].getRemained();
+        *pos[i] = mySwimmer[i].getSwimmer();
+    }
+    for (int i=0; i<countSwimmer; ++i)
+    {
+        oneSwimmer* slowest = pos[0];
+        oneSwimmer* tmp;
         for (int j=0; i<countSwimmer; ++i)
-        {
-            if (mySwimmer[j].getRemained() < fastest)
+        {            
+            if (pos[j]->remained > slowest->remained)
             {
-                fastest = mySwimmer[j].getRemained();
+                tmp = slowest;
+                slowest = pos[j];
             }
         }    
     }

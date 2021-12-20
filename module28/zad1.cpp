@@ -23,7 +23,7 @@ void startSwim(oneSwimmer threadSwimmer)
         std::this_thread::sleep_for(std::chrono::seconds(1));
         threadSwimmer.remained -= threadSwimmer.speed;
         if (threadSwimmer.remained <= 0.01)
-        {
+       {
             threadSwimmer.heFinish=true;
             std::cout << "Swimmer " << threadSwimmer.name << " finished!\n";
         }
@@ -65,6 +65,11 @@ class Swimmer
         line->join();
         delete line;
     }
+    
+    double getRemained()
+    {
+        return inCSw.remained;
+    }
 };
 
 int main()
@@ -77,6 +82,16 @@ int main()
         mySwimmer[i].startThread();
 
     for (int i=0; i<countSwimmer; ++i)
+    {
         mySwimmer[i].Join();
+    }
+    
+    for (int i=0; i<countSwimmer; ++i)
+    {
+        double fastest = mySwimmer[0].getRemained();
+        for (int j=0; i<countSwimmer; ++i)
+        {
 
+        }    
+    }
 }

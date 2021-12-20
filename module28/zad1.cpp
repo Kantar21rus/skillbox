@@ -91,7 +91,10 @@ int main()
         double fastest = mySwimmer[0].getRemained();
         for (int j=0; i<countSwimmer; ++i)
         {
-
+            if (mySwimmer[j].getRemained() < fastest)
+            {
+                fastest = mySwimmer[j].getRemained();
+            }
         }    
     }
 }

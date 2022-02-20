@@ -1,4 +1,92 @@
+#include <iostream>
 
+class Toy
+{
+    std::string name;
+
+public:
+
+    Toy(std::string i_name) : name(i_name) {}
+    Toy() : Toy("Uknown") {}
+
+    std::string getName() { return name; }
+
+};
+
+class shared_support
+{
+    int count[100];
+public:
+    shared_support()
+    {
+        std::cout << "sp constructor\n";
+        for (int i = 0; i < 100; ++i)
+            count[i] = -1;
+    }
+    friend class shared_ptr_toy;
+};
+
+class shared_ptr_toy
+{
+    int* count;
+    Toy* toyPtr;
+
+public:
+
+    int id = 0;
+    shared_ptr_toy(Toy* i_Toy, shared_support* i_sp) : toyPtr(i_Toy)
+    {
+        std::cout << "ptr constructor1\n";
+        bool circle = true;
+        while (circle)
+        {
+            if (i_sp->count[id] != -1)
+                ++id;
+            else
+                circle = false;
+        }
+        if (i_sp->count[id] == -1)
+        {
+            i_sp->count[id] = 1;
+            count = &(i_sp->count[id]);
+        }
+        else
+        {
+            ++i_sp->count[id];
+            count = &(i_sp->count[id]);
+        }
+    }
+
+    shared_ptr_toy(shared_ptr_toy& i_spt)
+    {
+        std::cout << "ptr constructor2\n";
+        ++(*i_spt.count);
+        count = i_spt.count;
+        toyPtr = i_spt.toyPtr;
+    }
+
+    shared_ptr_toy() { count = nullptr; toyPtr = nullptr; }
+
+    shared_ptr_toy& operator=(shared_ptr_toy& i_spt)
+    {
+        if (count != nullptr)
+        {
+            (*count)--;
+            if (*count == 0)
+                delete toyPtr;
+        }
+        count = i_spt.count;
+        (*count)++;
+        toyPtr = i_spt.toyPtr;
+        id = i_spt.id;
+        return *this;
+    }
+
+    void decrimentCount() { (*count)--; }
+    int getCount() { return *count; }
+    std::string getName() { return toyPtr->getName(); }
+
+    ~shared_ptr_toy()
     {
         std::cout << "ptr destructor\n";
         if (*count > 1)

@@ -61,6 +61,7 @@ public:
     {
         std::cout << "ptr constructor2\n";
         ++(*i_spt.count);
+        id = i_spt.id;
         count = i_spt.count;
         toyPtr = i_spt.toyPtr;
     }
@@ -88,12 +89,13 @@ public:
 
     ~shared_ptr_toy()
     {
-        std::cout << "ptr destructor\n";
+        std::cout << toyPtr->getName() << " ptr destructor\n";
         if (*count > 1)
             --(*count);
         else
         {
             delete toyPtr;
+            toyPtr = nullptr;
             *count = 0;
             count = nullptr;
         }
@@ -101,7 +103,7 @@ public:
 
 };
 
-shared_ptr_toy& make_shared(Toy * i_Toy, shared_support* i_sp)
+shared_ptr_toy& make_shared(Toy* i_Toy, shared_support* i_sp)
 {
     shared_ptr_toy* tmp = new shared_ptr_toy(i_Toy, i_sp);
     tmp->decrimentCount();
@@ -114,6 +116,7 @@ int main()
     shared_support* spClass = new shared_support;
     Toy* mToy = new Toy("Ball");
     Toy* mToy2 = new Toy("Bone");
+    Toy* mToy3 = new Toy("Ball");
 
     shared_ptr_toy sptr1(mToy, spClass);
     shared_ptr_toy sptr2(sptr1);
@@ -123,7 +126,7 @@ int main()
     shared_ptr_toy sptr6(mToy2, spClass);
     shared_ptr_toy sptr7(sptr6);
     shared_ptr_toy sptr8;
-    sptr8 = make_shared(mToy, spClass);
+    sptr8 = make_shared(mToy3, spClass);
     std::cout << "Name: " << sptr1.getName() << " id " << sptr1.id << " count: " << sptr1.getCount() << "\n";
     std::cout << "Name: " << sptr6.getName() << " id " << sptr6.id << " count: " << sptr6.getCount() << "\n";
     std::cout << "Name: " << sptr7.getName() << " id " << sptr7.id << " count: " << sptr7.getCount() << "\n";

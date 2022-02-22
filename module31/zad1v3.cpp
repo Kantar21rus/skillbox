@@ -12,7 +12,7 @@ public:
     std::string getName() { return name; }
 
 };
-
+/*
 class shared_support
 {
     int count[100];
@@ -25,18 +25,20 @@ public:
     }
     friend class shared_ptr_toy;
 };
-
+*/
 class shared_ptr_toy
 {
+    int tmp = 1;
     int* count;
     Toy* toyPtr;
 
 public:
 
     int id = 0;
-    shared_ptr_toy(Toy* i_Toy, shared_support* i_sp) : toyPtr(i_Toy)
+    shared_ptr_toy(Toy* i_Toy) : toyPtr(i_Toy)
     {
         std::cout << "ptr constructor1\n";
+        /*
         bool circle = true;
         while (circle)
         {
@@ -51,10 +53,8 @@ public:
             count = &(i_sp->count[id]);
         }
         else
-        {
-            ++i_sp->count[id];
-            count = &(i_sp->count[id]);
-        }
+        */
+        count = &tmp;
     }
 
     shared_ptr_toy(shared_ptr_toy& i_spt)
@@ -103,9 +103,9 @@ public:
 
 };
 
-shared_ptr_toy& make_shared(Toy* i_Toy, shared_support* i_sp)
+shared_ptr_toy& make_shared(Toy* i_Toy)
 {
-    shared_ptr_toy* tmp = new shared_ptr_toy(i_Toy, i_sp);
+    shared_ptr_toy* tmp = new shared_ptr_toy(i_Toy);
     tmp->decrimentCount();
     return *tmp;
 }
@@ -113,20 +113,20 @@ shared_ptr_toy& make_shared(Toy* i_Toy, shared_support* i_sp)
 
 int main()
 {
-    shared_support* spClass = new shared_support;
+//    shared_support* spClass = new shared_support;
     Toy* mToy = new Toy("Ball");
     Toy* mToy2 = new Toy("Bone");
     Toy* mToy3 = new Toy("Ball");
 
-    shared_ptr_toy sptr1(mToy, spClass);
+    shared_ptr_toy sptr1(mToy);
     shared_ptr_toy sptr2(sptr1);
     shared_ptr_toy sptr3(sptr1);
     shared_ptr_toy sptr4(sptr1);
     shared_ptr_toy sptr5(sptr1);
-    shared_ptr_toy sptr6(mToy2, spClass);
+    shared_ptr_toy sptr6(mToy2);
     shared_ptr_toy sptr7(sptr6);
     shared_ptr_toy sptr8;
-    sptr8 = make_shared(mToy3, spClass);
+    sptr8 = make_shared(mToy3);
     std::cout << "Name: " << sptr1.getName() << " id " << sptr1.id << " count: " << sptr1.getCount() << "\n";
     std::cout << "Name: " << sptr6.getName() << " id " << sptr6.id << " count: " << sptr6.getCount() << "\n";
     std::cout << "Name: " << sptr7.getName() << " id " << sptr7.id << " count: " << sptr7.getCount() << "\n";

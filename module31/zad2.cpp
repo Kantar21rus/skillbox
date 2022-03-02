@@ -14,17 +14,11 @@ struct s_vertex
 class IGraph {
 
     public:
-
-        s_vertex* vertexs;
-        int count = 0;
-
         virtual ~IGraph() {}
 
-        IGraph(s_vertex* i_vertexs, int& i_count) : vertexs(i_vertexs), count(i_count) {};
+        IGraph() {};
 
         IGraph(IGraph *_oth) {
-            vertexs = _oth->vertexs;
-            count = _oth->count;
         };
 
         virtual void AddEdge(s_vertex& from, s_vertex& to) = 0; // Метод принимает вершины начала и конца ребра и добавляет ребро
@@ -41,8 +35,18 @@ class ListGraph : public IGraph {
 
     public:
 
-        ListGraph(s_vertex* i_vertexs, int& i_count) : IGraph(i_vertexs, i_count) {};
-        ListGraph(IGraph* i_graph) : IGraph(i_graph) {
+        s_vertex* vertexs;
+        int count = 0;
+
+        ListGraph(s_vertex* i_vertexs, int& i_count) { 
+            vertexs = i_vertexs;
+            count = i_count;
+        };
+        ListGraph(IGraph* i_graph) {
+            ListGraph* tmpPtr = (ListGraph*) i_graph; 
+            vertexs = tmpPtr->vertexs;
+            count = tmpPtr->count;
+            
             for (int i=0; i < count; ++i) {
                 for (int j=0; j < count; ++j) {
                     if (vertexs[i].adjacentVertex[j] == 1) {
@@ -94,9 +98,18 @@ class MatrixGraph : public IGraph {
 
     public:
 
-        MatrixGraph(s_vertex* i_vertexs, int& i_count) : IGraph(i_vertexs, i_count) {};
+        s_vertex* vertexs;
+        int count = 0;
 
-        MatrixGraph(IGraph* i_graph) : IGraph(i_graph) {
+        MatrixGraph(s_vertex* i_vertexs, int& i_count) {
+            vertexs = i_vertexs;
+            count = i_count;
+        };
+
+        MatrixGraph(IGraph* i_graph) {
+            MatrixGraph* tmpPtr = (MatrixGraph*) i_graph; 
+            vertexs = tmpPtr->vertexs;
+            count = tmpPtr->count;
             for (int i=0; i < count; ++i) {
                 std::vector<int> tmpVec(count);
                 for (int j=0; j < vertexs[i].adjacentVertex.size(); ++j) {
